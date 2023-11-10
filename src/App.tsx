@@ -3,27 +3,28 @@ import React, { useState } from 'react';
 import './App.css';
 import { TaskType, Todolist } from './Todolist';
 import { v1 } from 'uuid';
+import { log } from 'console';
 
 
 export type FilterValueType = "All" | "Completed" | "Active"
 
 function App() {
 
-  const [tasks, setTasks] = useState <Array<TaskType>>(
+  const [tasks, setTasks] = useState<Array<TaskType>>(
     [
       { id: v1(), title: "css", isDone: true },
       { id: v1(), title: "js", isDone: true },
       { id: v1(), title: "react", isDone: false },
       { id: v1(), title: "redux", isDone: false },
     ]
-  
+
   );
 
   const [filter, setFilter] = useState<FilterValueType>("All");
- 
+
 
   const removeTask = (id: string) => {
-    let resultTask = tasks.filter( task => task.id !== id)
+    let resultTask = tasks.filter(task => task.id !== id)
     setTasks(resultTask)
   }
 
@@ -42,23 +43,37 @@ function App() {
     setFilter(value)
   }
 
+  const changeStatus = (taskId: string) => {
+    let task = tasks.find(t => t.id === taskId);
+
+
+    if (task) {
+      task.isDone = !task.isDone
+
+    }
+    setTasks([...tasks])
+
+  }
+
   let tasksForTodolist = tasks;
 
-  if (filter === "Completed" ) {
-    tasksForTodolist = tasks.filter( (task) => task.isDone === true)
+  if (filter === "Completed") {
+    tasksForTodolist = tasks.filter((task) => task.isDone === true)
   }
-  if (filter === "Active" ) {
-    tasksForTodolist = tasks.filter( (task) => task.isDone === false)
+  if (filter === "Active") {
+    tasksForTodolist = tasks.filter((task) => task.isDone === false)
   }
 
   return (
     <div className="App">
-      <Todolist 
-      title="what to learn" 
-      tasks={tasksForTodolist} 
-      removeTask = {removeTask}
-      changeFilter = {changeFilter}
-      addTask = {addTask}
+      <Todolist
+        title="what to learn"
+        tasks={tasksForTodolist}
+        filter = {filter}
+        removeTask={removeTask}
+        changeFilter={changeFilter}
+        addTask={addTask}
+        changeTaskStatus={changeStatus}
       />
 
     </div>
