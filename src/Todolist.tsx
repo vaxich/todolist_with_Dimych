@@ -2,13 +2,15 @@ import { ChangeEvent, KeyboardEvent, useState } from "react"
 import { FilterValueType } from "./App"
 
 type PropsType = {
+  todolistId: string
   title: string
   tasks: Array<TaskType>
   filter: FilterValueType
-  removeTask: (id: string) => void
-  changeFilter: (value: FilterValueType) => void
-  addTask: (newTaskTitle: string) => void
-  changeTaskStatus: (taskId: string) => void
+  removeTask: (todolistId: string, taskId: string) => void
+  changeFilter: (todolistId: string, value: FilterValueType) => void
+  addTask: (todolistId: string, newTaskTitle: string) => void
+  changeTaskStatus: (todolistId: string, taskId: string) => void
+  removeTodolist: (todolistId: string) => void
 
 }
 
@@ -34,20 +36,24 @@ export function Todolist(props: PropsType) {
 
   const addTask = () => {
     if (newTaskTitle.trim() !== "") {
-      props.addTask(newTaskTitle);
+      props.addTask(props.todolistId, newTaskTitle);
       setNewTaskTitle("")
     } else {
       setError("Title is requared")
     }
   }
 
-  const onAllClickHandler = () => props.changeFilter("All")
-  const onActiveClickHandler = () => props.changeFilter("Active")
-  const onCompletedClickHandler = () => props.changeFilter("Completed")
+  const removeTodolist =() => {
+    props.removeTodolist(props.todolistId)
+  }
+
+  const onAllClickHandler = () => props.changeFilter(props.todolistId, "All")
+  const onActiveClickHandler = () => props.changeFilter(props.todolistId, "Active")
+  const onCompletedClickHandler = () => props.changeFilter(props.todolistId, "Completed")
 
   return (
     <div>
-      <h3>{props.title}</h3>
+      <h3>{props.title} <button onClick = {removeTodolist}>X</button></h3>
       <div>
         <input
           className={error ? "error" : ""}
@@ -63,10 +69,10 @@ export function Todolist(props: PropsType) {
         {props.tasks.map((task) => {
 
           const onRemoveHandler = () => {
-            props.removeTask(task.id)
+            props.removeTask(props.todolistId, task.id)
           }
           const onChangeHandler = () => {
-            props.changeTaskStatus(task.id)
+            props.changeTaskStatus(props.todolistId, task.id)
           }
 
           return (
