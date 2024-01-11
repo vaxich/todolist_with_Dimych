@@ -82,7 +82,7 @@ export function Todolist(props: PropsType) {
               <IconButton onClick={onRemoveHandler}>
                 <Delete />
               </IconButton>
-              {/* <button onClick={onRemoveHandler}>X</button> */}
+              
             </div>
           )
         })}
