@@ -8,7 +8,7 @@ export const todolistsReducer = (state: TodolistType[], action: todolistsReducer
         }
         case "ADD-TODOLIST": {
             let newTodolist: TodolistType = {
-                id: v1(),
+                id: action.payload.todolistId,
                 title: action.payload.newTitle,
                 filter: "All"
             }
@@ -28,34 +28,35 @@ export const todolistsReducer = (state: TodolistType[], action: todolistsReducer
 
 type todolistsReducerACType = RemoveTodolistACType | AddTodolistACType | ChangeTodolistTitleACType | ChangeTodolistFilterACType
 
-type RemoveTodolistACType = ReturnType<typeof RemoveTodolistAC>
-type AddTodolistACType = ReturnType<typeof AddTodolistAC>
-type ChangeTodolistTitleACType = ReturnType<typeof ChangeTodolistTitleAC>
-type ChangeTodolistFilterACType = ReturnType<typeof ChangeTodolistFilterAC>
+export type RemoveTodolistACType = ReturnType<typeof removeTodolistAC>
+export type AddTodolistACType = ReturnType<typeof addTodolistAC>
+type ChangeTodolistTitleACType = ReturnType<typeof changeTodolistTitleAC>
+type ChangeTodolistFilterACType = ReturnType<typeof changeTodolistFilterAC>
 
 
-export const RemoveTodolistAC = (todolistId: string) => {
+export const removeTodolistAC = (todolistId: string) => {
     return {
         type: "REMOVE-TODOLIST",
         payload: { todolistId }
     } as const
 }
 
-export const AddTodolistAC = (newTitle: string) => {
+export const addTodolistAC = (newTitle: string) => {
+    const todolistId = v1()
     return {
         type: "ADD-TODOLIST",
-        payload: { newTitle }
+        payload: {todolistId, newTitle }
     } as const
 }
 
-export const ChangeTodolistTitleAC = (todolistId: string, localTitle: string) => {
+export const changeTodolistTitleAC = (todolistId: string, localTitle: string) => {
     return {
         type: "CHANGE-TODOLIST-TITLE",
         payload: { todolistId, localTitle }
     } as const
 }
 
-export const ChangeTodolistFilterAC = (todolistId: string, value: FilterValueType) => {
+export const changeTodolistFilterAC = (todolistId: string, value: FilterValueType) => {
     return {
         type: "CHANGE-TODOLIST-FILTER",
         payload: { todolistId, value }
